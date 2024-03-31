@@ -1,13 +1,3 @@
-/**
- *
- * @author Hakan CİVELEK ve mail
- * @since 31.03.2024
- * <p>
- * * Bu sınıf, GitHub deposunun URL'sini kullanıcıdan alır ve ilgili işlemleri gerçekleştirir.
- * * Kullanıcıdan alınan URL ile bir Git deposu oluşturur, bu depoyu klonlar ve ardından dosya işlemlerini başlatır.
- * </p>
- */
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

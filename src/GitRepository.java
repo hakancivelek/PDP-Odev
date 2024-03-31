@@ -9,7 +9,6 @@
  */
 
 import java.io.File;
-import java.io.IOException;
 
 public class GitRepository {
     private String repositoryUrl;
@@ -28,7 +27,7 @@ public class GitRepository {
             } else {
                 System.out.println("Repository klonlanırken bir hata oluştu.");
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
