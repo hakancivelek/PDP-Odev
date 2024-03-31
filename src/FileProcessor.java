@@ -1,3 +1,14 @@
+/**
+ *
+ * @author Hakan CİVELEK ve mail
+ * @since 31.03.2024
+ * <p>
+ * Bu sınıf, dosya işlemlerini gerçekleştirir.
+ * Belirtilen bir dizindeki tüm dosyaları dolaşır ve Java dosyalarını işler.
+ * Her Java dosyasını açar, içinde sınıf tanımının olup olmadığını kontrol eder ve varsa dosya adını yazdırır.
+ * </p>
+ */
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

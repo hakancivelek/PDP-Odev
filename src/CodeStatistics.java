@@ -1,3 +1,22 @@
+/**
+ *
+ * @author Hakan CİVELEK ve mail
+ * @since 31.03.2024
+ * <p>
+ * Bu sınıf, belirtilen .java dosyaları için istatistikler hesaplar.
+ * Her dosyanın içeriğini okur, dosyadaki kod, yorum satırları ve Java doc satırlarını sayar,
+ * ayrıca dosyadaki fonksiyonların sayısını hesaplar.
+ * </p>
+ * <p>
+ * Bu sınıfın kullanımı için, calculateStatisticsForFiles metoduna .java dosyalarının tam yollarını içeren bir dizi gönderilmelidir.
+ * Her dosya için ayrı ayrı istatistikler hesaplanır ve konsola yazdırılır.
+ * </p>
+ *
+ * <p>
+ * Not: Dosyaların istatistiklerinin doğru bir şekilde hesaplanabilmesi için dosyaların tam yolunun belirtilmesi önemlidir.
+ * </p>
+ */
+
 import java.io.*;
 
 public class CodeStatistics {
