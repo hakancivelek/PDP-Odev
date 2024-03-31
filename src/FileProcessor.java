@@ -1,5 +1,4 @@
 /**
- *
  * @author Hakan CİVELEK ve mail
  * @since 31.03.2024
  * <p>
@@ -26,7 +25,6 @@ public class FileProcessor {
         } else if (file.isFile() && file.getName().endsWith(".java")) {
             if (containsClass(file)) {
                 // Java dosyasında en az bir sınıf tanımı bulunuyorsa dosyanın adını yazdır
-                System.out.println("Sınıf dosyası: " + file.getName());
 
                 // CodeStatistics sınıfını kullanarak istatistikleri hesapla
                 CodeStatistics.calculateStatisticsForFiles(new String[]{file.getAbsolutePath()});

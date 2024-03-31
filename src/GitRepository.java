@@ -23,9 +23,9 @@ public class GitRepository {
             Process process = Runtime.getRuntime().exec(cloneCommand);
             int exitCode = process.waitFor();
             if (exitCode == 0) {
-                System.out.println("Repository başarıyla klonlandı.");
+                System.out.println("Repository başarıyla klonlandı.\n");
             } else {
-                System.out.println("Repository klonlanırken bir hata oluştu.");
+                System.out.println("Repository klonlanırken bir hata oluştu.\n");
             }
         } catch (Exception e) {
             e.printStackTrace();

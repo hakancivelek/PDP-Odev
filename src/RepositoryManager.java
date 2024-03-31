@@ -1,5 +1,4 @@
 /**
- *
  * @author Hakan CİVELEK ve mail
  * @since 31.03.2024
  * <p>
