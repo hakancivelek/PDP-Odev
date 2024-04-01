@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class CodeStatistics {
     public static void calculateStatisticsForFiles(String[] fileNames) {
@@ -10,52 +13,52 @@ public class CodeStatistics {
     private static void calculateStatistics(String fileName) {
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             int javadocLines = 0;
-            int otherComments = 0;
+            int commentLines = 0;
             int codeLines = 0;
             int totalLines = 0;
             int functionCount = 0;
+
+            boolean inJavadocBlock = false;
             boolean inCommentBlock = false;
 
-            // Dosya adını alma
             File file = new File(fileName);
             String fileSimpleName = file.getName();
 
             String line;
             while ((line = reader.readLine()) != null) {
                 totalLines++;
-                if (line.matches("^\\s*\\/\\*\\*.*")) {
-                    // Javadoc satırlarını kontrol et
-                    inCommentBlock = true;
-                    javadocLines++;
-                } else if (line.matches("^\\s*\\/\\/.*")) {
-                    // Tek satırlık yorumları kontrol et
-                    otherComments++;
-                } else if (line.matches("^\\s*\\/\\*.*") && !line.matches("^\\s*\\/\\*\\*.*")) {
-                    // Çok satırlı yorumları kontrol et
-                    inCommentBlock = true;
-                    otherComments++;
-                } else if (inCommentBlock) {
-                    // Çok satırlı yorum bloğunun sonunu kontrol et
-                    if (line.matches(".*\\*\\/\\s*")) {
-                        inCommentBlock = false;
-                    }
-                    javadocLines++;
-                } else if (!line.trim().isEmpty()) {
-                    // Kod satırlarını kontrol et
-                    codeLines++;
 
+                // Javadoc, tek satırlık yorum, çok satırlı yorum bloklarını kontrol et
+                if (line.trim().startsWith("/*")) {
+                    inCommentBlock = true;
+                    commentLines++;
+                    if (!line.trim().endsWith("*/")) {
+                        // Yorum bloğu bitene kadar devam eder
+                        while ((line = reader.readLine()) != null) {
+                            totalLines++;
+                            commentLines++;
+                            if (line.trim().endsWith("*/")) {
+                                inCommentBlock = false;
+                                break;
+                            }
+                        }
+                    }
+                } else if (line.trim().startsWith("//")) {
+                    // Tek satırlık yorumu say
+                    commentLines++;
+                } else if (!inCommentBlock && !line.trim().isEmpty()) {
+                    // Yorum içinde değilse ve boş satır değilse kod satırıdır
+                    codeLines++;
                     // Fonksiyon tanımlarını kontrol et
-                    if (line.matches(".*\\bvoid\\b.*\\(.*\\)\\s*\\{\\s*") ||
-                            line.matches(".*\\bint\\b.*\\(.*\\)\\s*\\{\\s*") ||
-                            line.matches(".*\\b\\w+\\b.*\\(.*\\)\\s*\\{\\s*")) {
+                    String functionPattern = ".*\\b([a-zA-Z_$][a-zA-Z_$0-9]*)\\b\\s+([a-zA-Z_$][a-zA-Z_$0-9]*)\\s*\\(.*\\)\\s*\\{?\\s*$";
+                    if (line.matches(functionPattern)) {
                         functionCount++;
                     }
                 }
             }
 
-            javadocLines -= 4;
             // Yorum Sapma Yüzdesi Hesaplama
-            double YG = ((javadocLines + otherComments) * 0.8) / functionCount;
+            double YG = ((javadocLines + commentLines) * 0.8) / functionCount;
             double YH = (codeLines * 1.0 / functionCount) * 0.3;
             double commentDeviationPercentage = ((100 * YG) / YH) - 100;
             commentDeviationPercentage = Math.round(commentDeviationPercentage * 100.0) / 100.0; // Ondalık 2 haneli olarak yuvarla
@@ -63,7 +66,7 @@ public class CodeStatistics {
             // Çıktıları yazdır
             System.out.println("Sınıf: " + fileSimpleName);
             System.out.println("Javadoc Satır Sayısı: " + javadocLines);
-            System.out.println("Yorum Satır Sayısı: " + otherComments);
+            System.out.println("Yorum Satır Sayısı: " + commentLines);
             System.out.println("Kod Satırı Sayısı: " + codeLines);
             System.out.println("LOC: " + totalLines);
             System.out.println("Fonksiyon Sayısı: " + functionCount);
