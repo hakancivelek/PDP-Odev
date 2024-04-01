@@ -1,5 +1,4 @@
 /**
- *
  * @author Hakan CİVELEK ve mail
  * @since 31.03.2024
  * <p>
@@ -22,9 +21,7 @@ public class GitRepository {
         try {
             Process process = Runtime.getRuntime().exec(cloneCommand);
             int exitCode = process.waitFor();
-            if (exitCode == 0) {
-                System.out.println("Repository başarıyla klonlandı.\n");
-            } else {
+            if (exitCode != 0) {
                 System.out.println("Repository klonlanırken bir hata oluştu.\n");
             }
         } catch (Exception e) {

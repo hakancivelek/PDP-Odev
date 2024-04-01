@@ -54,10 +54,11 @@ public class CodeStatistics {
             }
 
             javadocLines -= 4;
-            // Yorum sapma yüzdesi hesapla
+            // Yorum Sapma Yüzdesi Hesaplama
             double YG = ((javadocLines + otherComments) * 0.8) / functionCount;
-            double YH = (double) (codeLines / functionCount) * 0.3;
+            double YH = (codeLines * 1.0 / functionCount) * 0.3;
             double commentDeviationPercentage = ((100 * YG) / YH) - 100;
+            commentDeviationPercentage = Math.round(commentDeviationPercentage * 100.0) / 100.0; // Ondalık 2 haneli olarak yuvarla
 
             // Çıktıları yazdır
             System.out.println("Sınıf: " + fileSimpleName);
