@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CodeStatistics {
     public static void calculateStatisticsForFiles(String[] fileNames) {
@@ -19,7 +21,7 @@ public class CodeStatistics {
             int functionCount = 0;
 
             boolean inJavadocBlock = false;
-            boolean inCommentBlock = false;
+            boolean inMultiLineCommentBlock = false;
 
             File file = new File(fileName);
             String fileSimpleName = file.getName();
@@ -28,26 +30,54 @@ public class CodeStatistics {
             while ((line = reader.readLine()) != null) {
                 totalLines++;
 
-                // Javadoc, tek satırlık yorum, çok satırlı yorum bloklarını kontrol et
-                if (line.trim().startsWith("/*")) {
-                    inCommentBlock = true;
-                    commentLines++;
+                if (inJavadocBlock) {
+                    if (line.trim().endsWith("*/")) {
+                        if (line.trim().length() > 3) {
+                            javadocLines++;
+                        }
+                        inJavadocBlock = false;
+                    } else {
+                        javadocLines++;
+                    }
+                } else if (line.trim().startsWith("/**")) {
+                    inJavadocBlock = true;
+                    if (line.trim().length() > 4) {
+                        javadocLines++;
+                    }
+                } else if (line.trim().startsWith("/*")) {
+                    inMultiLineCommentBlock = true;
                     if (!line.trim().endsWith("*/")) {
                         // Yorum bloğu bitene kadar devam eder
                         while ((line = reader.readLine()) != null) {
                             totalLines++;
-                            commentLines++;
-                            if (line.trim().endsWith("*/")) {
-                                inCommentBlock = false;
+                            if (line.trim().startsWith("/*") && line.trim().length() > 3) {
+                                commentLines++;
+                            } else if (line.trim().endsWith("*/")) {
+                                if (line.trim().length() > 3) {
+                                    commentLines++;
+                                }
+                                inMultiLineCommentBlock = false;
                                 break;
+                            } else {
+                                commentLines++;
                             }
                         }
                     }
-                } else if (line.trim().startsWith("//")) {
+                } else if (line.contains("//")) {
                     // Tek satırlık yorumu say
+                    String[] splitLine = line.split("//");
+                    String codePart = splitLine[0].trim();
+                    if (!codePart.isEmpty()) {
+                        codeLines++;
+                        // Fonksiyon tanımlarını kontrol et
+                        String functionPattern = ".*\\b([a-zA-Z_$][a-zA-Z_$0-9]*)\\b\\s+([a-zA-Z_$][a-zA-Z_$0-9]*)\\s*\\(.*\\)\\s*\\{?\\s*$";
+                        if (codePart.matches(functionPattern)) {
+                            functionCount++;
+                        }
+                    }
                     commentLines++;
-                } else if (!inCommentBlock && !line.trim().isEmpty()) {
-                    // Yorum içinde değilse ve boş satır değilse kod satırıdır
+                } else if (!inMultiLineCommentBlock && !line.trim().isEmpty() && !line.trim().startsWith("//")) {
+                    // Yorum içinde değilse ve boş satır değilse ve tek satırlık yorum satırı değilse kod satırıdır
                     codeLines++;
                     // Fonksiyon tanımlarını kontrol et
                     String functionPattern = ".*\\b([a-zA-Z_$][a-zA-Z_$0-9]*)\\b\\s+([a-zA-Z_$][a-zA-Z_$0-9]*)\\s*\\(.*\\)\\s*\\{?\\s*$";
