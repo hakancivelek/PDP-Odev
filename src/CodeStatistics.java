@@ -20,6 +20,7 @@ public class CodeStatistics {
     }
 
     private static void calculateStatistics(String fileName) {
+        Regex regex = new Regex();
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             int javadocLines = 0;
             int commentLines = 0;
@@ -38,20 +39,46 @@ public class CodeStatistics {
                 totalLines++;
 
                 if (inJavadocBlock) {
-                    if (line.trim().endsWith("*/")) {
-                        if (line.trim().length() > 3) {
+                    if (line.trim().contains("/**")) {
+                        inJavadocBlock = true;
+                        //Solunda kod satırı olup olmadığını kontrol ediyor ve varsa codeLines'ı 1 arttırıyor
+                        String regexForCodeLine = "^(?!\\s*\\/\\*\\*).*;$";
+                        boolean isThereAnyCodeBeforeDoc = regex.Search(line, regexForCodeLine);
+                        if (isThereAnyCodeBeforeDoc) {
+                            codeLines++;
+                        }
+
+                        //İçerisinde bir şeyler yazan tek satır doc varsa javadocLines'ı 1 arttırıyor
+                        String checkSingleLineDoc = "/\\*\\*\\s*\\*/";
+                        boolean singleLineValidDocLine = regex.Search(line, checkSingleLineDoc);
+                        if (singleLineValidDocLine) {
                             javadocLines++;
                         }
-                        inJavadocBlock = false;
-                    } else {
-                        javadocLines++;
+
+                        //İlk doclineda boşluk harici bir şeyler varsa  ve
+                        //singleLine docline değilse doc varsa javadocLines'ı 1 arttırıyor
+                        String checkForFirstLine = "/\\*\\*\\s+(?=\\S)";
+                        boolean isThereAnyDocLineNearFirstLine = regex.Search(line, checkForFirstLine);
+                        if (isThereAnyDocLineNearFirstLine && !singleLineValidDocLine) {
+                            javadocLines++;
+                        }
                     }
-                } else if (line.trim().startsWith("/**")) {
-                    inJavadocBlock = true;
-                    if (line.trim().length() > 4) {
-                        javadocLines++;
+                    // Çok satırlı doclinesa buradan devam ediyor
+                    else {
+                        if (line.trim().contains("*/")) {
+                            String checkIsItValidDoc = "(?<=\\S)\\*/";
+                            boolean validLastLineDoc = regex.Search(line, checkIsItValidDoc);
+                            if (validLastLineDoc) {
+                                javadocLines++;
+                            }
+                            inJavadocBlock = false;
+                        } else if (!line.equals("/**")) {
+                            javadocLines++;
+                        }
                     }
-                } else if (line.trim().startsWith("/*")) {
+                }
+
+                if (line.trim().contains("/*")) {
                     inMultiLineCommentBlock = true;
                     if (!line.trim().endsWith("*/")) {
                         // Yorum bloğu bitene kadar devam eder
