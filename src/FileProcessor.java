@@ -1,10 +1,12 @@
 /**
- * @author Hakan CİVELEK ve mail
+ *
+ * @author Hakan CİVELEK - hakan.civelek2@ogr.sakarya.edu.tr
  * @since 31.03.2024
  * <p>
  * Bu sınıf, dosya işlemlerini gerçekleştirir.
  * Belirtilen bir dizindeki tüm dosyaları dolaşır ve Java dosyalarını işler.
- * Her Java dosyasını açar, içinde sınıf tanımının olup olmadığını kontrol eder ve varsa dosya adını yazdırır.
+ * Her Java dosyasını açar, içinde sınıf tanımının olup olmadığını kontrol eder ve varsa bunları istatistiklerin
+ * hesaplanması için CodeStatistics.calculateStatisticsForFiles'a gönderir.
  * </p>
  */
 

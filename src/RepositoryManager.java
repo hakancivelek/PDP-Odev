@@ -1,5 +1,6 @@
 /**
- * @author Hakan CİVELEK ve mail
+ *
+ * @author Hakan CİVELEK - hakan.civelek2@ogr.sakarya.edu.tr
  * @since 31.03.2024
  * <p>
  * * Bu sınıf, GitHub deposunun URL'sini kullanıcıdan alır ve ilgili işlemleri gerçekleştirir.

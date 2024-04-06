@@ -1,5 +1,6 @@
 /**
- * @author Hakan CİVELEK ve mail
+ *
+ * @author Hakan CİVELEK - hakan.civelek2@ogr.sakarya.edu.tr
  * @since 31.03.2024
  * <p>
  * Bu sınıf, bir Git deposunu temsil eder ve bu depo üzerinde çeşitli işlemleri gerçekleştirir.

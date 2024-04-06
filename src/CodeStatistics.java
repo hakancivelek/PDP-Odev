@@ -1,9 +1,16 @@
+/**
+ *
+ * @author Hakan CİVELEK - hakan.civelek2@ogr.sakarya.edu.tr
+ * @since 31.03.2024
+ * <p>
+ * Bu sınıf, belirli dosyaların kod istatistiklerini hesaplar.
+ * </p>
+ */
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CodeStatistics {
     public static void calculateStatisticsForFiles(String[] fileNames) {
